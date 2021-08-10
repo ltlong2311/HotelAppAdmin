@@ -1,0 +1,103 @@
+#root {
+  height: 100%;
+  width: 100%;
+}
+
+.logo {
+  height: 32px;
+  margin: 0.86rem;
+  overflow: hidden;
+}
+
+.logo h1 {
+  color: #f1f1f1;
+  margin: auto;
+  text-align: center;
+}
+
+.logo-page {
+  height: 32px;
+  width: 30px;
+  margin: 0.86rem auto;
+  background: url("../images/hotel.png");
+  background-size: 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+#navbarBoard .icon-user-option {
+  display: inline-block;
+}
+
+#navbarBoard .icon-user-option svg {
+  position: absolute;
+  top: 50%;
+  -webkit-transform: translate(-50%, -55%);
+          transform: translate(-50%, -55%);
+}
+
+.ant-row-rtl .logo {
+  float: right;
+  margin: 16px 0 16px 24px;
+}
+
+.site-layout-background {
+  background: #fff;
+}
+
+#header-page {
+  padding: 0 0.4rem 0 0;
+}
+
+#navbarBoard {
+  -webkit-box-flex: 1;
+      -ms-flex-positive: 1;
+          flex-grow: 1;
+  float: right;
+}
+
+.trigger {
+  padding: 0 24px;
+  font-size: 18px;
+  line-height: 64px;
+  cursor: pointer;
+  color: #d1d1d1;
+  -webkit-transition: color 0.3s;
+  transition: color 0.3s;
+}
+
+.trigger:hover {
+  color: #1890ff;
+}
+
+.ant-menu-dark.ant-menu-horizontal > .ant-menu-item:hover {
+  background-color: #001529;
+}
+
+.ant-menu.ant-menu-dark .ant-menu-item-selected, .ant-menu-submenu-popup.ant-menu-dark .ant-menu-item-selected {
+  background-color: #001529;
+  color: #a0a0a0;
+}
+
+.ant-menu-dark .ant-menu-item-selected .ant-menu-item-icon, .ant-menu-dark .ant-menu-item-selected .anticon {
+  color: #a5a5a5;
+}
+
+.ant-menu-dark .ant-menu-item-active, .ant-menu-dark .ant-menu-submenu-active, .ant-menu-dark .ant-menu-submenu-open, .ant-menu-dark .ant-menu-submenu-selected {
+  color: none;
+  background-color: transparent;
+}
+
+.ant-menu-dark .ant-menu-item:hover, .ant-menu-dark .ant-menu-submenu-title:hover {
+  color: #f1f1f1;
+  background-color: #001529;
+}
+
+.site-layout .site-layout-background {
+  background: #fff;
+}
+
+[data-theme="dark"] .site-layout .site-layout-background {
+  background: #141414;
+}
+/*# sourceMappingURL=HomePage.css.map */

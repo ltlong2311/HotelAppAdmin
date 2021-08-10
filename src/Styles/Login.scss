@@ -1,0 +1,30 @@
+.login-page {
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(180deg, rgb(197, 90, 211), rgb(137, 139, 145));
+    .center {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 400px;
+        background: #ffffff;
+        border-radius: 2px;
+        padding: 20px;
+        box-shadow: 1px 1px 1px 1px #b8aeae inset;
+    }
+    .image-login {
+        align-items: center;
+        text-align: center;
+        padding: 1rem 0rem 2rem;
+    }
+
+    .login-form {
+        margin-right: 2rem;
+    }
+
+    .btn-login{
+        width: 70%;
+        text-align: center;
+    }
+}
