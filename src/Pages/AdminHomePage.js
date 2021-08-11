@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import "antd/dist/antd.css";
 import { Layout } from "antd";
 import { BrowserRouter as Router} from "react-router-dom";
-import "../Styles/HomePage.css";
 import Navbar from "../Components/Navbar";
 import Sidebar from "../Components/Sidebar";
 import RouterPage from "../Routes/RouterPage";

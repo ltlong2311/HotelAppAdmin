@@ -33,18 +33,51 @@ const Chart = () => {
   };
   var config = {
     data: data,
+    title: {
+      visible: true,
+      text: "Doanh thu tuần qua",
+    },
     xField: "from",
     yField: "summary",
-    xAxis: { tickCount: 7 },
-    // xAxis: { range: [0, 1] },
+    // xAxis: { tickCount: 6 },
+    xAxis: { range: [0, 1] },
     animation: false,
     slider: {
       start: 0.1,
       end: 0.9,
       trendCfg: { isArea: true },
     },
+    point: {
+      visible: true,
+      shape: "circle",
+      style: {
+        fill: "white",
+        stroke: "#2593fc",
+        lineWidth: 2,
+      },
+    },
   };
-  return <Area {...config} />;
+  return (
+    <div>
+      <Area
+        style={{
+          marginTop: 40,
+        }}
+        {...config}
+      />
+      <div
+        className=""
+        style={{
+          padding: 24,
+          margin: 0,
+          textAlign: "center",
+          color: "#6c7a89",
+        }}
+      >
+        Biểu đồ doanh thu tuần qua
+      </div>
+    </div>
+  );
 };
 
 export default Chart;

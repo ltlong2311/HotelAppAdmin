@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import "../Styles/Login.css";
 import { Form, Input, Button, Checkbox, Image } from "antd";
 import imageIconLogin from "../images/hotel.png";
 import { useHistory } from "react-router-dom";

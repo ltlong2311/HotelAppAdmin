@@ -11,8 +11,6 @@ import {
 import { MdRoomService } from "react-icons/md";
 import { Link } from "react-router-dom";
 
-import "../Styles/HomePage.css";
-
 const { SubMenu } = Menu;
 const { Sider } = Layout;
 

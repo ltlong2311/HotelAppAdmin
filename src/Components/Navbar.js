@@ -10,7 +10,6 @@ import {
 } from "@ant-design/icons";
 import { MdAccountCircle } from "react-icons/md";
 
-import "../Styles/HomePage.css";
 
 const { Header} = Layout;
 

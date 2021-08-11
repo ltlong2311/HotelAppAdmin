@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import "antd/dist/antd.css";
 import { useHistory } from "react-router-dom";
 import RouterURL from "./Routes/RouterURL";
+import './Styles/index.css'
 // import history from '../history';
 
 function App() {
