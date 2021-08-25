@@ -9,6 +9,7 @@ import {
   DownOutlined,
 } from "@ant-design/icons";
 import { MdAccountCircle } from "react-icons/md";
+import { Link } from "react-router-dom";
 
 
 const { Header} = Layout;
@@ -23,10 +24,10 @@ const Navbar = (props) => {
   const menu = (
     <Menu>
       <Menu.Item key="0">
-        <a href="/info">Thiết Lập Cài Đặt</a>
+        <Link to="/manager/setting">Thiết Lập Cài Đặt</Link>
       </Menu.Item>
       <Menu.Item key="1">
-        <a href="/support">Đổi mật khẩu</a>
+        <Link to="/manager/changePassword">Đổi mật khẩu</Link>
       </Menu.Item>
       <Menu.Divider />
       <Menu.Item key="3" onClick={logOut}>

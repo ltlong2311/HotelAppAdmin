@@ -1,6 +1,6 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
-import Login from "../Components/Login";
+import Login from "../Pages/LoginPage";
 import AdminHomePage from "../Pages/AdminHomePage";
 const RouterURL = (props) => {
     const logOut = () => {

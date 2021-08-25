@@ -44,7 +44,7 @@ const Sidebar = (props) => {
         <SubMenu key="sub2" icon={<TeamOutlined />} title="Quản lý user">
           <Menu.Item key="6">
             {" "}
-            <Link to="/manager/user">Thông tin</Link>
+            <Link to="/manager/user/list">Thông tin</Link>
           </Menu.Item>
           <Menu.Item key="8">
             {" "}

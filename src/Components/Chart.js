@@ -1,35 +1,31 @@
 import React, { useState, useEffect } from "react";
 import { Area } from "@ant-design/charts";
-import axios from "axios";
+import token from "../readCookie";
+import chartAPI from "../API/ChartAPI";
 
 const Chart = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    getData();
+    getData(); // eslint-disable-next-line
   }, []);
-  let token = localStorage.getItem("token");
-  var bodyFormData = new FormData();
-  bodyFormData.append("token", token);
-  bodyFormData.append("filter", "lastWeek");
-  const getData = () => {
-    axios({
-      method: "post",
-      url: "/statisticPay",
-      data: bodyFormData,
-      headers: { "Content-Type": "multipart/form-data" },
-    })
-      .then(function (response) {
-        console.log(response);
-        if (response.data.status === "success") {
-          const dataChart = response.data.data;
-          setData(dataChart);
-          console.log(dataChart);
-        }
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+
+  const getData = async () => {
+    var bodyFormData = new FormData();
+    bodyFormData.append("token", token);
+    bodyFormData.append("filter", "lastWeek");
+
+    try {
+      const res = await chartAPI.dataFilter(bodyFormData);
+      console.log(res);
+      if (res.status === "success") {
+        const dataChart = res.data;
+        setData(dataChart);
+        console.log(dataChart);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
   var config = {
     data: data,
@@ -39,7 +35,7 @@ const Chart = () => {
     },
     xField: "from",
     yField: "summary",
-    // xAxis: { tickCount: 6 },
+    // xAxis: { tickCount: 1 },
     xAxis: { range: [0, 1] },
     animation: false,
     slider: {

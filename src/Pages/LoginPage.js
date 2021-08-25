@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Form, Input, Button, Checkbox, Image } from "antd";
 import imageIconLogin from "../images/hotel.png";
 import { useHistory } from "react-router-dom";
-import axios from "axios";
+import loginAPI from "../API/LoginAPI";
 const onFinish = (values) => {
   console.log("Success:", values);
 };
@@ -11,19 +11,16 @@ const onFinishFailed = (errorInfo) => {
   console.log("Failed:", errorInfo);
 };
 
-const Login = (props) => {
+const Login = () => {
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
   const [rememberLogin, setRememberLogin] = useState(true);
   const history = useHistory();
 
-  const changeRememberLogin = (e) => {
-    setRememberLogin(e.target.checked);
-  };
-
   var bodyFormData = new FormData();
   bodyFormData.append("username", username);
   bodyFormData.append("password", password);
+
   const setCookie = (c_name, value, exdays) => {
     var exdate = new Date();
     exdate.setDate(exdate.getDate() + exdays);
@@ -32,29 +29,30 @@ const Login = (props) => {
       (exdays === null ? "" : "; expires=" + exdate.toUTCString());
     document.cookie = c_name + "=" + c_value;
   };
-  const login = () => {
-    axios({
-      method: "post",
-      url: "/login",
-      data: bodyFormData,
-      headers: { "Content-Type": "multipart/form-data" },
-    })
-      .then(function (response) {
-        console.log(response);
-        let token = response.data.data.token;
-        if (response.data.status === "success") {
-          if (rememberLogin) {
-            localStorage.setItem("token", token);
-          }
-          sessionStorage.setItem("token", token);
-          setCookie("token", token, 5)
-          history.push("/manager/dashboard");
+
+  const onLogin = () => {
+    if (username && password) {
+      login();
+    }
+  };
+
+  const login = async () => {
+    try {
+      const res = await loginAPI.login(bodyFormData);
+      console.log(res);
+      if (res.status === "success") {
+        let token = res.data.token;
+        if (rememberLogin) {
+          setCookie("token", token, 5);
         }
-      })
-      .catch(function (error) {
-        console.log(error);
-        alert("Tài khoản hoặc mật khẩu không đúng");
-      });
+        sessionStorage.setItem("token", token);
+        history.push("/manager/dashboard");
+      } else {
+        alert(res.msg);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <div className="login-page">
@@ -111,7 +109,10 @@ const Login = (props) => {
               span: 16,
             }}
           >
-            <Checkbox onChange={(e) => changeRememberLogin(e)}>
+            <Checkbox
+              defaultChecked={rememberLogin}
+              onChange={(e) => setRememberLogin(e.target.checked)}
+            >
               Ghi nhớ đăng nhập
             </Checkbox>
           </Form.Item>
@@ -123,7 +124,7 @@ const Login = (props) => {
             }}
           >
             <Button
-              onClick={login}
+              onClick={onLogin}
               className="btn-login"
               type="primary"
               htmlType="submit"

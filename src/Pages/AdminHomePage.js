@@ -5,7 +5,6 @@ import { BrowserRouter as Router} from "react-router-dom";
 import Navbar from "../Components/Navbar";
 import Sidebar from "../Components/Sidebar";
 import RouterPage from "../Routes/RouterPage";
-
 const AdminHomePage = (props) => {
   const logOut = () => {
     props.logOut();

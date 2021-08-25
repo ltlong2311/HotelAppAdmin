@@ -1,31 +1,36 @@
-// import { toast } from 'react-toastify';
-var redux = require('redux');
+import { toast } from "react-toastify";
 
-
+var redux = require("redux");
 const postInitialState = {
-    title: 'test',
-    isEdit: false,
-    editPost:{},
-    notify: "",
-    searchPost:"",
-    showImageDes: false,
-    imageDes:"",
-    showFormLogin: false,
-}
+  notify: "",
+  totalNumOfRooms: 0,
+  editRow: {},
+};
 const allReducer = (state = postInitialState, action) => {
-    switch (action.type) {
-        case "NOTIFY_SUCCESS":
-
-            return {...state, notify:action.notify}
-        case "NOTIFY_ERROR":
-
-            return {...state, notify:action.notifyEdit}
-        default:
-            return state
-    }
-}
+  switch (action.type) {
+    case "NOTIFY_SUCCESS":
+      toast.success(action.notifySuccess);
+      console.log(action.notifySuccess);
+      return {
+        ...state,
+        notify: action.notifySuccess,
+      };
+    case "NOTIFY_ERROR":
+      toast.error(action.notifyError);
+      console.log(action.notifyError);
+      return { ...state };
+    case "EDIT_ROW":
+      console.log(action.editRowData);
+      return { ...state, editRow: action.editRowData };
+    case "NUM_ROOMS":
+      console.log(action.totalNumOfRooms);
+      return { ...state, totalNumOfRooms: action.numOfRooms };
+    default:
+      return state;
+  }
+};
 var store = redux.createStore(allReducer);
-store.subscribe(function(){
-    // console.log(JSON.stringify(store.getState()));
-})
+store.subscribe(function () {
+  // console.log(JSON.stringify(store.getState()));
+});
 export default store;

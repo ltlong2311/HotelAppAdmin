@@ -1,51 +1,92 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { Table, Layout, Breadcrumb, Input, Space, Button } from "antd";
+import { Table, Layout, Breadcrumb, Input, Button, Popconfirm} from "antd";
 import { Link } from "react-router-dom";
 import { DeleteOutlined } from "@ant-design/icons";
+import receiptAPI from "../API/ReceiptAPI";
+import token from "../readCookie";
+import { connect } from "react-redux";
 
-const { Search } = Input;
-
-const onSearch = (value) => console.log(value);
-
-const ReceiptListPage = () => {
+const ReceiptListPage = (props) => {
   const onChange = (pagination, filters, sorter, extra) => {
     console.log("params", pagination, filters, sorter, extra);
   };
   const [data, setData] = useState([]);
   const [customer, setCustomer] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [dataChange, setDataChange] = useState(false);
+  const [searchTerm, setSearchTerm] = useState();
+  const { Search } = Input;
+
   useEffect(() => {
-    getData();
-  }, []);
+    getData(); // eslint-disable-next-line
+  }, [dataChange, searchTerm]);
 
-  const getData = () => {
-    axios
-      .get(`/pays`)
-      .then((res) => {
-        var dataReceipt = res.data.data;
-        const infoCustom = [];
-        // console.log(res);
-        for (let i = 0; i < dataReceipt.length; i++) {
-          infoCustom.push(dataReceipt[i].InfoKhach);
-          var customName = dataReceipt[i].InfoKhach.Ten;
-          dataReceipt[i].InfoKhach = customName;
-
-          var dataServiceList = dataReceipt[i].DichVu;
-          var arrService = [];
-          for (let j = 0; j < dataServiceList.length; j++) {
-            arrService.push(dataServiceList[j].TenDV);
-          }
-          dataReceipt[i].DichVu = arrService.join(", ");
+  const getData = async () => {
+    setLoading(true);
+    try {
+      const res = await receiptAPI.getAll();
+      const dataReceipt = res.data;
+      var arrReceipt = [];
+      var infoCustom = [];
+      for (let i = 0; i < dataReceipt.length; i++) {
+        infoCustom.push(dataReceipt[i].InfoKhach);
+        var customName = dataReceipt[i].InfoKhach.Ten;
+        dataReceipt[i].InfoKhach = customName;
+        var dataServiceList = dataReceipt[i].DichVu;
+        var arrService = [];
+        for (let j = 0; j < dataServiceList.length; j++) {
+          arrService.push(dataServiceList[j].TenDV);
         }
-        setCustomer(infoCustom);
-        setData(dataReceipt);
-      })
-      .catch((error) => console.log(error));
+        dataReceipt[i].DichVu = arrService.join(", ");
+      }
+      setCustomer(infoCustom);
+      dataReceipt.forEach((element) => {
+        if (
+          element.InfoKhach.indexOf(searchTerm) !== -1 ||
+          element.ID.indexOf(searchTerm) !== -1
+        ) {
+          arrReceipt.push(element);
+        }
+      });
+      setData(arrReceipt);
+      if (!searchTerm) setData(dataReceipt);
+      setLoading(false);
+      console.log(res);
+    } catch (error) {
+      console.log("Error", error);
+      setLoading(false);
+    }
   };
-    console.log(data);
-    console.log(customer);
-  //   console.log(services);
+  
+  
+  const onSearch = (value) => {
+    setSearchTerm(value);
+    console.log(searchTerm);
+  };
 
+  const onDelete = async (id) => {
+    var bodyFormData = new FormData();
+    bodyFormData.append("token", token);
+    bodyFormData.append("ID", id);
+    try {
+      const res = await receiptAPI.delete(bodyFormData);
+      if (res.status === "success") {
+        props.notifySuccess(" ✔ Xóa hóa đơn thành công");
+        onDataChange();
+      } else {
+        props.notifyError(res.msg);
+        console.log(res);
+      }
+    } catch (error) {
+      props.notifyError("Error");
+      console.log(error);
+    }
+  };
+
+  const onDataChange = () => {
+    setDataChange(!dataChange);
+  };
+  console.log(customer);
   const columns = [
     {
       title: "ID",
@@ -82,18 +123,23 @@ const ReceiptListPage = () => {
       title: "Action",
       dataIndex: "",
       key: "x",
-      render: () => (
+      render: (record) => (
         <>
-          <Button type="danger" icon={<DeleteOutlined />}>
-            Xóa
-          </Button>
+           <Popconfirm
+            title="Xác nhận xóa?"
+            onConfirm={() => onDelete(record.ID)}
+          >
+            <Button type="danger" icon={<DeleteOutlined />}>
+              Xóa
+            </Button>
+          </Popconfirm>
         </>
       ),
     },
   ];
-
+ 
   return (
-    <Layout id="room-list-page" style={{ padding: "0 24px 24px" }}>
+    <Layout id="receipt-list-page" style={{ padding: "0 24px 24px" }}>
       <Breadcrumb style={{ margin: "20px 0" }}>
         <Breadcrumb.Item>
           <Link to="/manager/dashboard">Quản trị</Link>
@@ -101,23 +147,46 @@ const ReceiptListPage = () => {
         <Breadcrumb.Item>Quản lý hóa đơn</Breadcrumb.Item>
       </Breadcrumb>
 
-      <Space direction="horizontal" style={{ margin: "0 0 20px" }}>
+      <div direction="horizontal" style={{ margin: "0 0 20px" }}>
         <Search
-          placeholder=""
+          placeholder="Tên KH, ID, ..."
           allowClear
           enterButton
           onSearch={onSearch}
-          style={{ width: 200 }}
+          style={{ width: 200, float: "right" }}
         />
-      </Space>
+      </div>
       <Table
         columns={columns}
         dataSource={data}
-        pagination={{ pageSize: 15 }}
+        loading={loading}
+        rowKey="ID"
+        pagination={{
+          defaultPageSize: 10,
+          showSizeChanger: true,
+          pageSizeOptions: ["10", "15", "20", "25", "30", "50"],
+        }}
         onChange={onChange}
       />
     </Layout>
   );
 };
 
-export default ReceiptListPage;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    notifySuccess: (notifySuccess) => {
+      dispatch({
+        type: "NOTIFY_SUCCESS",
+        notifySuccess,
+      });
+    },
+    notifyError: (notifyError) => {
+      dispatch({
+        type: "NOTIFY_ERROR",
+        notifyError,
+      });
+    },
+  };
+};
+
+export default connect(null, mapDispatchToProps)(ReceiptListPage);

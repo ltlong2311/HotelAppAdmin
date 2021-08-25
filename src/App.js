@@ -1,11 +1,14 @@
 import React, { useEffect } from "react";
-import "antd/dist/antd.css";
 import { useHistory } from "react-router-dom";
 import RouterURL from "./Routes/RouterURL";
-import './Styles/index.css'
-// import history from '../history';
+import { connect } from "react-redux";
+import { ToastContainer } from "react-toastify";
+import "antd/dist/antd.css";
+import "./Styles/index.css";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
+  
   const history = useHistory();
 
   const logOut = () => {
@@ -28,24 +31,36 @@ function App() {
     return null;
   };
   useEffect(() => {
-    let tokenLogin = readCookie("token");
+    let tokenLogin = readCookie("token"); 
     console.log(tokenLogin);
     if (
       localStorage.getItem("token") ||
       sessionStorage.getItem("token") ||
       tokenLogin
-    ) {
+    ) { 
       history.push("/manager/dashboard");
     } else {
       history.push("/login");
-    }
+    }// eslint-disable-next-line 
   }, []);
 
   return (
     <>
       <RouterURL logOut={logOut} />
+      <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        newestOnTop
+        closeOnClick
+      />
     </>
   );
 }
 
-export default App;
+const mapStateToProps = (state) => {
+  return {
+    notify: state.notify,
+  };
+};
+
+export default connect(mapStateToProps)(App);
